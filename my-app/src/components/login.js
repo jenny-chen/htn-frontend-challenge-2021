@@ -1,34 +1,34 @@
 import styled, { css } from 'styled-components'
-// import {
-//   Form,
-//   Label,
-//   Input,
-// } from './basics'
+import {
+  Input,
+  Text,
+} from './basics'
 
-const Form = styled.form`
+const Form = styled.div`
   width: 30%;
   float: right;
   position: fixed;
-  top: 40%;
+  top: 25%;
   left: 50%;
 
   width: 300px;
-  margin-left: -150px;
+  margin-left: -200px;
+  border: 2px solid ${props => props.theme.colors.darkBlue};
+  border-radius: 10px;
+  padding: 50px;
+  // background-color: ${props => props.theme.colors.white};
+  // background-color: white;
 `
 
 const Label = styled.form`
   margin-top: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
 `
 
-const Input = styled.input`
-  width: 97%;
-
-  ${props => props.submit && css`
-    width: 100%;
-  `}
-`
 
 function Login(props) {
+  console.log(props)
   return (
     <Form>
       <Label>Username</Label>
@@ -39,6 +39,7 @@ function Login(props) {
         value={ props.username }
       />
       <br/>
+      {props.usernameError && <Text error>Incorrect username</Text>}
       <Label>Password</Label>
       <br/>
       <Input
@@ -47,11 +48,20 @@ function Login(props) {
         value={ props.password }
       />
       <br/>
+      {props.passwordError && <Text error>Incorrect password</Text>}
       <Input
+        button
         submit
         onClick={ props.handleSubmit }
         type="submit"
         value="Login"
+      />
+      <Input
+        button
+        cancel
+        onClick={ props.handleCancel }
+        type="button"
+        value="Cancel"
       />
     </Form>
   )

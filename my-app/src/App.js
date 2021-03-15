@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text,
-  EventTypeText,
-  Title,
-  Header,
-  OutsideBox,
-  InsideBox,
-  FilterInput,
-  EventBox,
-  Button,
-  EventTitle,
-  DateHeader,
-} from './components/basics/components.js'
-import {
   Anchor,
+  Box,
+  DateHeader,
+  EventBox,
+  EventTitle,
   Form,
-  Label,
+  Header,
   Input,
+  Label,
+  Text,
+  Title,
 } from './components/basics'
 import Login from './components/login.js'
 
 function App() {
   const [events, setEvents] = useState([]);
   const [activeEvents, setActiveEvents] = useState([]);
+  const [groupedByDateEvents, setGroupedByDateEvents] = useState({});
+  const [activeDay, setActiveDay] = useState([]);
   const [expandedEvents, setExpandedEvents] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [filterValues, setFilterValues] = useState([]);
@@ -31,6 +27,8 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginActive, setLoginActive] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   // TODO:
   //   set it so that when logging in, hide everything else
@@ -40,8 +38,6 @@ function App() {
   //   fix up the colourrsssss pls
 
   useEffect(() => {
-    console.log("USE EFFECT")
-
     document.addEventListener("scroll", e => {
       let scrolled = document.scrollingElement.scrollTop;
       setScroll(document.scrollingElement.scrollTop)
@@ -50,7 +46,8 @@ function App() {
 
     function groupByDate(list) {
       return list.reduce(function(accum, current) {
-        var property = (new Date(current.start_time)).toLocaleString("en-CA", {weekday: 'long', month: 'long', day: 'numeric'});
+        // var property = (new Date(current.start_time)).toLocaleString("en-CA", {weekday: 'long', month: 'long', day: 'numeric'});
+        var property = (new Date(current.start_time)).toLocaleString("en-CA", {month: 'long', day: 'numeric'});
         if (!accum[property]) {
           accum[property] = [];
         }
@@ -60,7 +57,10 @@ function App() {
     }
 
     function filterByTerms(allEvents, filterValues) {
-      return allEvents.filter(event => filterValues.some(filterValue => ((event.name.toLowerCase()).includes(filterValue.toLowerCase())) || event.event_type.toLowerCase().includes(filterValue.toLowerCase())));
+      return allEvents.filter(event => filterValues.some(filterValue => ((
+        event.name.toLowerCase()).includes(filterValue.toLowerCase())) ||
+        event.event_type.toLowerCase().includes(filterValue.toLowerCase()) ||
+        (new Date(event.start_time)).toLocaleString("en-CA", {weekday: 'long', month: 'long', day: 'numeric'}).toLowerCase().includes(filterValue.toLowerCase())))
     }
 
     async function fetchEvents() {
@@ -81,6 +81,8 @@ function App() {
             filteredEvents = filteredEvents.filter(event => event.permission === "public")
           }
           setActiveEvents(filteredEvents)
+
+          setGroupedByDateEvents(groupByDate(filteredEvents))
         });
     }
 
@@ -89,7 +91,7 @@ function App() {
     console.log(events);
     // prevent scroll up each time the hook goes off
     document.scrollingElement.scrollTop = scroll;
-  }, [filterValues, expandedEvents, loggedIn])
+  }, [loginActive, filterValues, expandedEvents, loggedIn])
 
   function handleFilterChange(e) {
     setInputValue(e.target.value);
@@ -131,80 +133,136 @@ function App() {
   }
 
   function handleSubmit(e) {
-    console.log("username: ", username)
-    console.log("password: ", password)
-    if (username === "username" && password === "password") {
-      setLoggedIn(true);
+    if (username === "username") {
+      setUsernameError(false);
+      if (password === "password") {
+        setLoggedIn(true);
+        setLoginActive(false);
+        setPasswordError(false);
+      } else {
+        setPasswordError(true);
+      }
+    } else {
+      setUsernameError(true);
+      setPasswordError(true);
     }
   }
 
-  return (
-    <OutsideBox>
-      <div style={{ height: "15vh" }}>
-        <Title>Schedule</Title>
-        {loggedIn ? <Text>Welcome {username}!</Text> :
-          <Login
-            handleUsernameChange={ handleUsernameChange }
-            username={ username }
-            handlePasswordChange={ handlePasswordChange }
-            password={ password }
-            handleSubmit={ handleSubmit }
-          />
-        }
-      </div>
-      <Header>
-        <div>
-          <DateHeader>day placeholder</DateHeader>
-        </div>
-        <FilterInput
-          onChange={ handleFilterChange }
-          placeholder="Filter schedule by..."
-          type="text"
-          value={ inputValue }
-        />
-      </Header>
+  function handleCancel(e) {
+    setLoginActive(false);
+    setUsernameError(false);
+    setPasswordError(false);
+  }
 
-      <InsideBox>
-        {activeEvents.length === 0 && <EventBox><Text>Whoops, it looks like there are no matching events.</Text></EventBox>}
-        {activeEvents.map((event, i) => {
-          var start = new Date(event.start_time);
-          var end = new Date(event.end_time);
-          var startTime = start.toLocaleString("en-CA", {hour: 'numeric', minute: '2-digit'});
-          var endTime = end.toLocaleString("en-CA", {hour: 'numeric', minute: '2-digit'});
-          var dateText;
-          if (currentDate !== start.getDate()) {
-            currentDate = start.getDate();
-            dateText = start.toLocaleString("en-CA", {weekday: 'long', month: 'long', day: 'numeric'});
-          }
+  function handleLogin(e) {
+    setLoginActive(true);
+  }
+
+  function handleLogout(e) {
+    setLoginActive(false);
+  }
+
+  return (
+    loginActive ?
+      <Login
+        handleUsernameChange={ handleUsernameChange }
+        username={ username }
+        handlePasswordChange={ handlePasswordChange }
+        password={ password }
+        handleSubmit={ handleSubmit }
+        handleCancel={ handleCancel }
+        usernameError = { usernameError }
+        passwordError = { passwordError}
+      />
+      :
+      <Box outside>
+        <Box top>
+          <Title>Schedule</Title>
+          <Box login loggedIn={ loggedIn }>
+            {loggedIn ?
+              <Input
+                button
+                onClick={ handleLogout}
+                type="button"
+                value="Logout"
+              />
+              :
+              <Input
+                button
+                onClick={ handleLogin }
+                type="button"
+                value="Login"
+              />
+            }
+          </Box>
+        </Box>
+        {loggedIn && <Text bold>Welcome {username}!</Text>}
+        <Header filter>
+          <Input
+            filter
+            onChange={ handleFilterChange }
+            placeholder="Filter schedule by..."
+            type="text"
+            value={ inputValue }
+          />
+        </Header>
+
+        {Object.keys(groupedByDateEvents).map((day, i) => {
           return (
             <>
-              <EventBox id={event.id} key={event.id} first={i === 0 ? true : false}>
-                <a onClick={ (e) => handleEventClick(e, event.id) }>
-                  <EventTypeText type={event.event_type}>{getEventType(event.event_type)}</EventTypeText>
-                  <EventTitle type={event.event_type}>{event.name}</EventTitle>
-                  <Text>{startTime} - {endTime}</Text>
-                </a>
-              {(expandedEvents.includes(event.id)) &&
-                <>
-                  <Text>{event.description}</Text>
-                  {event.related_events.length > 0 && <Text bold>Related Events:</Text>}
-                  {event.related_events.map((relatedEventId, j) => {
+              <Header>
+                <DateHeader>{day}</DateHeader>
+              </Header>
+              <Box inside>
+                {activeEvents.length === 0 && <EventBox><Text>Whoops, it looks like there are no matching events.</Text></EventBox>}
+                {groupedByDateEvents[day].map((event, j) => {
+                  var start = new Date(event.start_time);
+                  var end = new Date(event.end_time);
+                  var startTime = start.toLocaleString("en-CA", {hour: 'numeric', minute: '2-digit'});
+                  var endTime = end.toLocaleString("en-CA", {hour: 'numeric', minute: '2-digit'});
+                  var longDate = (new Date(event.start_time)).toLocaleString("en-CA", {weekday: 'long', month: 'long', day: 'numeric'});
+                  var dateText;
+                  if (currentDate !== start.getDate()) {
+                    currentDate = start.getDate();
+                    dateText = start.toLocaleString("en-CA", {weekday: 'long', month: 'long', day: 'numeric'});
+                  }
                   return (
-                    <Anchor href={"#"+relatedEventId}>
-                      <Text>{(events.find(eve => {
-                        return eve.id === relatedEventId
-                        })).name}
-                      </Text>
-                    </Anchor>
+                    <>
+                      <EventBox id={event.id} key={event.id} first={j === 0 ? true : false}>
+                        <a onClick={ (e) => handleEventClick(e, event.id) }>
+                          <Text type={event.event_type}>{getEventType(event.event_type)}</Text>
+                          <EventTitle type={event.event_type}>{event.name}</EventTitle>
+                          <Text bold>{longDate}</Text>
+                          <Text>{startTime} - {endTime}</Text>
+                        </a>
+                      {(expandedEvents.includes(event.id)) &&
+                        <>
+                          <Text>{event.description}</Text>
+                          {event.related_events.length > 0 && <Text bold>Related Events:</Text>}
+                          {event.related_events.map((relatedEventId, j) => {
+                            var targetEvent = (events.find(eve => {
+                              return eve.id === relatedEventId
+                            }))
+                            if (!loggedIn && targetEvent.permission === "private") {
+                              return
+                            } else {
+                              return (
+                                <Anchor href={"#"+relatedEventId}>
+                                  <Text>{targetEvent.name}</Text>
+                                </Anchor>
+                              )
+                            }
+                          })}
+                        </>}
+                      </EventBox>
+                    </>
                   )
-                  })}
-                </>}
-              </EventBox>
+                })}
+              </Box>
             </>
           )
         })}
-      </InsideBox>
-    </OutsideBox>
+      </Box>
   );
 }
 

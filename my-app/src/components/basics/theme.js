@@ -15,6 +15,8 @@ const theme = {
     lightestGray: "#EDF2F7",
     offWhite: "#FFF5EB",
     lightPink: "#F6D9CB",
+    darkerLightPink: "#EAB098",
+    blue: "#143867",
     darkBlue: "#102E55",
     darkBeige: "#E29779",
     tartOrange: "#ED5651",
