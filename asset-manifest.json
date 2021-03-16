@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/htn-frontend-challenge-2021/static/js/main.376581c0.chunk.js",
-    "main.js.map": "/htn-frontend-challenge-2021/static/js/main.376581c0.chunk.js.map",
+    "main.js": "/htn-frontend-challenge-2021/static/js/main.6bec4109.chunk.js",
+    "main.js.map": "/htn-frontend-challenge-2021/static/js/main.6bec4109.chunk.js.map",
     "runtime-main.js": "/htn-frontend-challenge-2021/static/js/runtime-main.6ede4f6f.js",
     "runtime-main.js.map": "/htn-frontend-challenge-2021/static/js/runtime-main.6ede4f6f.js.map",
     "static/js/2.75147051.chunk.js": "/htn-frontend-challenge-2021/static/js/2.75147051.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.6ede4f6f.js",
     "static/js/2.75147051.chunk.js",
-    "static/js/main.376581c0.chunk.js"
+    "static/js/main.6bec4109.chunk.js"
   ]
 }
