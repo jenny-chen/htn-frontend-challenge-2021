@@ -53,7 +53,8 @@ function Event({
             var longDate = (new Date(event.start_time)).toLocaleString("en-CA", {weekday: 'long', month: 'long', day: 'numeric'});
             return (
               <EventBox id={event.id} key={event.id} first={eventIndex === 0 ? true : false}>
-                <a href="/#" onClick={ (e) => handleEventExpand(e, event.id) }>
+                {/* this href allows the element to still be accessible using only keyboard */}
+                <a href="javascript:undefined;" onClick={ (e) => handleEventExpand(e, event.id) }>
                   {/* Basic information; thumbnail-esque */}
                   <Text type={event.event_type}>{getEventType(event.event_type)}</Text>
                   <EventTitle type={event.event_type}>{event.name}</EventTitle>

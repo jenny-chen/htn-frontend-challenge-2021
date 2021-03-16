@@ -44,11 +44,11 @@ function App() {
   const [loginActive, setLoginActive] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [scroll, setScroll] = useState();
 
   useEffect(() => {
-    var scroll;
     document.addEventListener("scroll", e => {
-      scroll = (document.scrollingElement.scrollTop)
+      setScroll(document.scrollingElement.scrollTop);
     })
 
     async function fetchEvents() {
