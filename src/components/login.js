@@ -26,7 +26,6 @@ const Label = styled.form`
 
 
 function Login(props) {
-  console.log(props)
   return (
     <Form>
       <Label>Username</Label>
