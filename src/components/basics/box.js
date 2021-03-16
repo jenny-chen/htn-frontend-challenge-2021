@@ -26,10 +26,6 @@ const Box = styled.div`
     ${({ theme }) => `${theme.mediaQueries.tablet} {
       float: right;
       width: 25%;
-      margin-top: 8%;
-    }`}
-
-    ${({ theme }) => `${theme.mediaQueries.tablet} {
       margin-top: 5%;
     }`}
   `}
