@@ -28,6 +28,10 @@ const Box = styled.div`
       width: 25%;
       margin-top: 8%;
     }`}
+
+    ${({ theme }) => `${theme.mediaQueries.tablet} {
+      margin-top: 5%;
+    }`}
   `}
 `
 
