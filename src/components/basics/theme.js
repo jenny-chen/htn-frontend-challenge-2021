@@ -10,7 +10,6 @@ const theme = {
     widescreen: breakpoints[3],
   },
   colors: {
-    black: "#16171A",
     lightGray: "#A9ACB5",
     lightestGray: "#EDF2F7",
     offWhite: "#FFF5EB",
@@ -21,10 +20,6 @@ const theme = {
     darkBeige: "#E29779",
     tartOrange: "#ED5651",
     teal: "#25B6C2",
-  },
-  fonts: {
-    mono: "SF Mono, Menlo, Source Pro Code, monospace",
-    serif: "Georgia, serif, system-ui",
   },
   mediaQueries: {
     mobile: `@media screen and (min-width: ${breakpoints[0]})`,

@@ -7,7 +7,8 @@ import {
 function Speakers({ event }) {
   return (
     event.speakers.length > 0 &&
-      <Text><strong>Speakers:</strong>
+      <Text>
+        <strong>Speakers:</strong>
         {event.speakers.map((speaker, speakerIndex) => {
           var name = speakerIndex === 0 ? " "+speaker.name : ", "+speaker.name;
           return (

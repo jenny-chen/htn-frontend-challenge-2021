@@ -10,7 +10,6 @@ import Event from './components/event/event.js'
 import Login from './components/login.js'
 
 // helper functions
-
 function filterByTerms(allEvents, filterValues) {
   return allEvents.filter(event => filterValues.some(filterValue => ((
     event.name.toLowerCase()).includes(filterValue.toLowerCase())) ||
@@ -32,19 +31,21 @@ function groupByDate(list) {
 
 function App() {
   // state
-  const [events, setEvents] = useState([]);
   const [activeEvents, setActiveEvents] = useState([]);
-  const [groupedByDateEvents, setGroupedByDateEvents] = useState({});
+  const [events, setEvents] = useState([]);
   const [expandedEvents, setExpandedEvents] = useState([]);
-  const [inputValue, setInputValue] = useState("");
   const [filterValues, setFilterValues] = useState([]);
+  const [groupedByDateEvents, setGroupedByDateEvents] = useState({});
+  const [inputValue, setInputValue] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loginActive, setLoginActive] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loginActive, setLoginActive] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [scroll, setScroll] = useState();
+
+  document.title = "HTN | Schedule"
 
   useEffect(() => {
     document.addEventListener("scroll", e => {
@@ -84,7 +85,6 @@ function App() {
 
 
   // handler functions
-
   function handleFilterChange(e) {
     setInputValue(e.target.value);
     setFilterValues(e.target.value.trim().split(" "));
@@ -143,6 +143,7 @@ function App() {
 
   return (
     loginActive ?
+      // show login screen
       <Login
         handleUsernameChange={ handleUsernameChange }
         username={ username }
@@ -154,10 +155,12 @@ function App() {
         passwordError = { passwordError}
       />
       :
+      // display events
       <Box outside>
         <Box top>
           <Title>Schedule</Title>
           <Box login loggedIn={ loggedIn }>
+            {/* different button appears depending on if user is logged in or not */}
             <Input
               button
               onClick={ loggedIn ? handleLogout : handleLogin }
@@ -177,6 +180,7 @@ function App() {
           />
         </Header>
 
+        {/*  */}
         <Event
           activeEvents={ activeEvents }
           groupedByDateEvents={ groupedByDateEvents }
@@ -190,4 +194,3 @@ function App() {
 }
 
 export default App;
-
