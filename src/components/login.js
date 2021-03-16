@@ -16,8 +16,6 @@ const Form = styled.div`
   border: 2px solid ${props => props.theme.colors.darkBlue};
   border-radius: 10px;
   padding: 50px;
-  // background-color: ${props => props.theme.colors.white};
-  // background-color: white;
 `
 
 const Label = styled.form`

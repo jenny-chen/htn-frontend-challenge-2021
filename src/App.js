@@ -111,9 +111,9 @@ function App() {
 
   function handleSubmit(e) {
     // hard-coded login details
-    if (username === "username") {
+    if (username === "admin") {
       setUsernameError(false);
-      if (password === "password") {
+      if (password === "hackthenorth") {
         setLoggedIn(true);
         setLoginActive(false);
         setPasswordError(false);

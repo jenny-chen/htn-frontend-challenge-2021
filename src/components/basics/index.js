@@ -7,6 +7,5 @@ export { default as Form } from './form.js';
 export { default as Header } from './header.js';
 export { default as Image } from './image.js';
 export { default as Input } from './input.js';
-export { default as Label } from './label.js';
 export { default as Text } from './text.js';
 export { default as Title } from './title.js';

@@ -9,7 +9,6 @@ const Box = styled.div`
     border: 2px solid ${props => props.theme.colors.darkBlue};
     border-radius: 10px;
     margin-bottom: 5%;
-    overflow: hidden;
   `}
 
   ${props => props.top && css`
